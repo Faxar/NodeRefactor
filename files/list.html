@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+    <body>
+        <div class="wrapper">
+          <div class="main">
+            <div class="lists">
+                <div class="list" id="allIng">
+                    <input type="text" placeholder="Search for Ingredients..." id="dbEntries">
+                    <table id = "apiItems">
+                        <tr class="header">
+                            <th>Ingredients</th>
+                        </tr>
+                    </table>
+                </div>
+                <div class="list" id="userIng">
+                    <input type="text" placeholder="Search for Ingredients..." id="userEntries">
+                    <table id = "userItems">
+                        <tr class="header">
+                            <th>Available Ingredients</th>
+                        </tr>
+                        <tr>
+                            <td>Item1</td>
+                        </tr>
+                        <tr>
+                            <td>Item2</td>
+                        </tr>
+                    </table>
+                </div>  
+            </div>
+        </div>
+          <div class="sidebar">
+            <div class="controlPane">
+              <a href="list.html" class="fas fa-wrench" ></a>
+              <a href="" class="fas fa-wrench"></a>
+              <a href="" class="fas fa-wrench"></a>
+              <a href="" class="fas fa-wrench"></a>
+            </div>
+          </div>
+          <div class="footer">
+            some text
+          </div>
+          <div class="head">
+            <div class="burger">
+              <i class="fas fa-list-ul fa-2x" style="font-size: 1.5em;"></i>
+              <div class="dropdown-content">
+                <a href="#popup1" style="display: block" id="getIn">Sign In</a>
+                <a href="" style="display: none">Sign out</a>
+                <a href="">Register</a>
+              </div>
+            </div>
+            <div class="userPro"></div>
+            <div class="mid"></div>
+          </div>
+          </div>
+        </div>
+        <div class="overlay" id="popup1">
+          <div class="popup">
+            <a class="close" href="#">&times;</a>
+            <div class="login" id="user">
+              <input type="text" class="userIn">
+            </div>
+            <div class="login" id="signUp">
+              <input type="text" class="passwordIn">
+            </div>
+              <div class="bar">
+                <button class="bar-item">Login</button>
+                <button class="bar-item">Signup</button>
+              </div> 
+          </div>
+        </div>
+        <script
+			  src="https://code.jquery.com/jquery-3.3.1.min.js"
+			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			  crossorigin="anonymous"></script>
+        <script src="./script/list.js"></script>
+    </body>
+</html>
