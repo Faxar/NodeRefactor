@@ -1,6 +1,9 @@
 var socket = io();
+var stringArr = ['someString', 'More strings', 'and some more strings'];
 
 $('#regUser').on('click', function(){
+    $('.promiseRes').text(stringArr[randomNumber()]);
+    
     var userName = $('.userIn').val();
     var password = $('.passwordIn').val();
 
@@ -12,4 +15,8 @@ $('#regUser').on('click', function(){
     }, function(proms) {
         $('.promiseRes').html(proms);
     });
-})
+});
+
+randomNumber = function () {
+    return Math.floor((Math.random() * 2));
+};
