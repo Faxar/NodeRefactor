@@ -239,3 +239,14 @@ left: 50%;
 transform: translateX(-50%) translateY(-50%);
 }
 
+#regUser {
+  width: 100%;
+  position: relative;
+  top: 5px;
+}
+
+.promiseRes {
+  text-align: center;
+  position: relative;
+  bottom: 5px;
+}
