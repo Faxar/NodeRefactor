@@ -11,15 +11,21 @@
 <body>
     <div class="wrapper">
         <div class="main">
-            <div class="register">
-                <div class="promiseRes"></div>
-                <div class="login" id="user">
-                <input type="text" class="userIn" placeholder="Username">
+            <div class="registerContent">
+                <div class="promiseRes">sometext</div>
+                <div class="inputs">
+                    <div class="login" id="user">
+                        <input type="text" class="userIn" placeholder="Username" onfocus="this.value=''">
+                        </div>
+                        <div class="login" id="signUp">
+                        <input type="text" class="passwordIn" placeholder="Password" onfocus="this.value=''">
+                        </div>
+                        <button id="regUser">Register</button>
                 </div>
-                <div class="login" id="pass">
-                <input type="text" class="passwordIn" placeholder="Password">
+                <div class="avatarBox">
+                    <img src="./avatars/fac1.jpg" alt="">
+                    <img src="./avatars/fac2.png" alt="">
                 </div>
-                <button id='regUser'>Register</button>
             </div>
         </div>
         <div class="sidebar">
@@ -36,6 +42,7 @@
         </div>
         <div class="head">
           <div class="userPro">
+              <div class="userPane"></div>
               <div id='userCred'>Guest/Login</div>
               <div class="dropdown-content">
                 <a href="#popup1" style="display: block" id="getIn">Sign In</a>
@@ -48,7 +55,6 @@
         </div>
       </div>
       <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-      <script src="socket.io/socket.io.js"></script>
-      <script src="./script/register.js"></script>
+      <script src="./register.js"></script>
 </body>
 </html>
