@@ -28,11 +28,10 @@ io.on('connection', (socket) => {
             password: userCred.pass
         });
     
-        console.log('recieved');
+        user.findByCredentials(user.userName, user.password).then(());
     
         user.save().then(()=>{
             callback('User Created');
-            console.log('callback success');
         }, (e) => {
             callback(e);
         });
