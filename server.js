@@ -28,7 +28,9 @@ io.on('connection', (socket) => {
             password: userCred.pass
         });
     
-        user.findByCredentials(user.userName, user.password).then(());
+        user.findByCredentials(user.userName, user.password).then(()=> {
+            
+        });
     
         user.save().then(()=>{
             callback('User Created');
