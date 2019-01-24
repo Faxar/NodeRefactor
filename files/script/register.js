@@ -1,22 +1,47 @@
-var socket = io();
-var stringArr = ['someString', 'More strings', 'and some more strings'];
+class RegisterForm extends React.Component {
+  state = {
+    user: "",
+    password: ""
+  };
 
-$('#regUser').on('click', function(){
-    $('.promiseRes').text(stringArr[randomNumber()]);
-    
-    var userName = $('.userIn').val();
-    var password = $('.passwordIn').val();
+  onChange = e => this.setState({ [e.target.name]: e.target.value });
 
-    console.log('emitting');
+  onSubmit = e => {
+    e.preventDefault();
+    console.log(this.state);
+  };
 
-    socket.emit('regUs', {
-        userN: userName,
-        pass: password
-    }, function(proms) {
-        $('.promiseRes').html(proms);
-    });
-});
+  render() {
+    const { user, password } = this.state;
 
-randomNumber = function () {
-    return Math.floor((Math.random() * 2));
-};
+    return (
+      <div className="card-body">
+        <form className="regForm" onSubmit={this.onSubmit}>
+          <label htmlFor="user">User</label>
+          <br />
+          <input
+            type="text"
+            name="user"
+            placeholder="Enter User Name..."
+            value={user}
+            onChange={this.onChange}
+          />
+          <br />
+          <label htmlFor="password">Password</label>
+          <br />
+          <input
+            type="text"
+            name="password"
+            placeholder="Enter password..."
+            value={password}
+            onChange={this.onChange}
+          />
+          <input type="submit" value="Submit" id="regSub" />
+        </form>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<RegisterForm />, document.getElementsByClassName("rect")[0]);
+
