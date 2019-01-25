@@ -1,21 +1,33 @@
 class RegisterForm extends React.Component {
-  state = {
-    user: "",
-    password: ""
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: "",
+      password: "",
+      createStatus: ""
+    };
+  }
 
   onChange = e => this.setState({ [e.target.name]: e.target.value });
 
   onSubmit = e => {
     e.preventDefault();
-    console.log(this.state);
+    this.verifyUser(e.target.user.value);
+  };
+
+  verifyUser = e => {
+    console.log("verify user");
+    e === "Vassili"
+      ? this.setState({ createStatus: "User created" })
+      : this.setState({ createStatus: "User can't be created" });
   };
 
   render() {
-    const { user, password } = this.state;
+    const { user, password, createStatus } = this.state;
 
     return (
-      <div className="card-body">
+      <React.Fragment>
+        <div>{createStatus}</div>
         <form className="regForm" onSubmit={this.onSubmit}>
           <label htmlFor="user">User</label>
           <br />
@@ -36,12 +48,15 @@ class RegisterForm extends React.Component {
             value={password}
             onChange={this.onChange}
           />
+          <br />
           <input type="submit" value="Submit" id="regSub" />
         </form>
-      </div>
+      </React.Fragment>
     );
   }
 }
 
-ReactDOM.render(<RegisterForm />, document.getElementsByClassName("rect")[0]);
-
+ReactDOM.render(
+  <RegisterForm />,
+  document.getElementsByClassName("card-body")[0]
+);
