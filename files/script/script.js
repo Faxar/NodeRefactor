@@ -1,9 +1,28 @@
-var socket = io();
+class Scripts extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      user: sessionStorage.getItem("user")
+    };
+  }
 
-$("#getIn, .close").on("click", function() {
-    $('.wrapper').toggleClass('is-blurred');
-});
+  render() {
+    const { user } = this.state;
 
-$('#getIt').on('click', function() {
-    
-})
+    return (
+      <div>
+        <div id="userCred">{user}</div>
+      </div>
+    );
+  }
+}
+
+// $("#getIn, .close").on("click", function() {
+//   console.log("clicked button");
+//   $(".wrapper").toggleClass("is-blurred");
+//   // blurToggle();
+// });
+
+ReactDOM.render(<Scripts />, document.getElementsByClassName("rets")[0]);
+
+console.log(document.getElementsByClassName("rets"));
