@@ -36,6 +36,20 @@ class RegisterForm extends React.Component {
 
   render() {
     const { user, password, createStatus, isLogin } = this.state;
+    let dropDownContent;
+    let loggedInUser;
+
+    if (user !== '' && isLogin) {
+      loggedInUser = user;
+    } else {
+      loggedInUser = '';
+    }
+
+    if (isLogin) {
+      dropDownContent = <RegisteredDropDownMenu />;
+    } else {
+      dropDownContent = <UnRegisteredDropDownMenu />;
+    }
 
     return (
       <React.Fragment>
@@ -80,22 +94,44 @@ class RegisterForm extends React.Component {
         <div className="head">
           <div className="userPro">
             <div className="userPane" />
-            <div id="userCred" />
-            <div className="dropdown-content">
-              <a href="#popup1" style={{ display: 'block' }} id="getIn">
-                Sign In
-              </a>
-              <a href="" style={{ display: 'none' }}>
-                Sign out
-              </a>
-              <a href="">Register</a>
-            </div>
+            <div id="userCred">{loggedInUser}</div>
+            <div className="dropdown-content">{dropDownContent}</div>
           </div>
           <div className="mid" />
         </div>
       </React.Fragment>
     );
   }
+}
+
+function RegisteredDropDownMenu() {
+  return (
+    <React.Fragment>
+      <a href="#popup1" style={{ display: 'none' }} id="getIn">
+        Sign In
+      </a>
+      <a href="" style={{ display: 'block' }}>
+        Sign out
+      </a>
+      <a href="" style={{ display: 'none' }}>
+        Register
+      </a>
+    </React.Fragment>
+  );
+}
+
+function UnRegisteredDropDownMenu() {
+  return (
+    <React.Fragment>
+      <a href="#popup1" style={{ display: 'block' }} id="getIn">
+        Sign In
+      </a>
+      <a href="" style={{ display: 'none' }}>
+        Sign out
+      </a>
+      <a href="">Register</a>
+    </React.Fragment>
+  );
 }
 
 ReactDOM.render(
