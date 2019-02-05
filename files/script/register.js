@@ -1,3 +1,5 @@
+var socket = io();
+
 class RegisterForm extends React.Component {
   constructor(props) {
     super(props);
@@ -11,6 +13,14 @@ class RegisterForm extends React.Component {
 
   onChange = e => this.setState({ [e.target.name]: e.target.value });
 
+  regMe = () => {
+    console.log('started');
+    socket.emit('regMe', {
+      userAccount: this.state.user,
+      userPass: this.state.password
+    });
+  };
+
   onSubmit = e => {
     e.preventDefault();
     this.verifyUser(e.target.user.value);
@@ -23,10 +33,18 @@ class RegisterForm extends React.Component {
 
   verifyUser = e => {
     console.log('verify user');
-    e === 'Vassili'
-      ? this.setState({ createStatus: 'User created', isLogin: true })
-      : this.setState({ createStatus: "User can't be created" });
-    this.provideConfirmation();
+    socket.emit(
+      'pleaseLogin',
+      { username: this.state.user, userPassword: this.state.password },
+      function(servResponse) {
+        console.log('app side response' + servResponse);
+      }
+    );
+    // console.log('verify user');
+    // e === 'Vassili'
+    //   ? this.setState({ createStatus: 'User created', isLogin: true })
+    //   : this.setState({ createStatus: "User can't be created" });
+    // this.provideConfirmation();
   };
 
   provideConfirmation = () =>
@@ -55,7 +73,7 @@ class RegisterForm extends React.Component {
       <React.Fragment>
         <div className="main">
           <div className="card-body">
-            <form className="regForm" onSubmit={this.onSubmit}>
+            <form className="regForm">
               <label htmlFor="user">User</label>
               <br />
               <input
@@ -76,7 +94,18 @@ class RegisterForm extends React.Component {
                 onChange={this.onChange}
               />
               <br />
-              <input type="submit" value="Submit" id="regSub" />
+              <button value="Login" onClick={this.onSubmit}>
+                Log
+              </button>
+              {/* <input
+                type="submit"
+                value="LogIn"
+                id="regSub"
+                onClick={this.onSubmit}
+              /> */}
+              <button value="register" onClick={this.regMe}>
+                Register
+              </button>
             </form>
             <div className="userResponseStatus">{createStatus}</div>
           </div>
