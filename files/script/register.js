@@ -3,46 +3,52 @@ class RegisterForm extends React.Component {
     super(props);
     this.state = {
       isLogin: false,
-      user: '',
-      password: '',
-      createStatus: ''
+      user: "",
+      password: "",
+      createStatus: "",
+      defaultUser: true
     };
   }
 
   onChange = e => this.setState({ [e.target.name]: e.target.value });
 
   onSubmit = e => {
+    console.log("onsubmit");
     e.preventDefault();
-    this.verifyUser(e.target.user.value);
+    this.verifyUser(this.state.user);
     this.populateStorage();
   };
 
+  onRegister = () => {
+    console.log(this.state.user);
+  };
+
   populateStorage = () => {
-    sessionStorage.setItem('user', this.state.user);
+    sessionStorage.setItem("user", this.state.user);
   };
 
   verifyUser = e => {
-    console.log('verify user');
-    e === 'Vassili'
-      ? this.setState({ createStatus: 'User created', isLogin: true })
-      : this.setState({ createStatus: "User can't be created" });
+    console.log("verify user");
+    this.setState()
     this.provideConfirmation();
   };
 
   provideConfirmation = () =>
     setTimeout(() => {
-      this.setState({ createStatus: '' });
+      this.setState({ createStatus: "" });
     }, 5000);
 
   render() {
-    const { user, password, createStatus, isLogin } = this.state;
+    const { user, password, createStatus, isLogin, defaultUser } = this.state;
     let dropDownContent;
     let loggedInUser;
+    let userCred = defaultUser ? "Guest" : this.state.user;
 
-    if (user !== '' && isLogin) {
+
+    if (user !== "" && isLogin) {
       loggedInUser = user;
     } else {
-      loggedInUser = '';
+      loggedInUser = "";
     }
 
     if (isLogin) {
@@ -51,11 +57,13 @@ class RegisterForm extends React.Component {
       dropDownContent = <UnRegisteredDropDownMenu />;
     }
 
+
+
     return (
       <React.Fragment>
         <div className="main">
           <div className="card-body">
-            <form className="regForm" onSubmit={this.onSubmit}>
+            <form className="regForm">
               <label htmlFor="user">User</label>
               <br />
               <input
@@ -75,9 +83,11 @@ class RegisterForm extends React.Component {
                 value={password}
                 onChange={this.onChange}
               />
-              <br />
-              <input type="submit" value="Submit" id="regSub" />
             </form>
+            <div id="buttonContainer">
+              <button onClick={this.onSubmit}>LogIn</button>
+              <button onClick={this.onRegister}>Register</button>
+            </div>
             <div className="userResponseStatus">{createStatus}</div>
           </div>
         </div>
@@ -107,13 +117,13 @@ class RegisterForm extends React.Component {
 function RegisteredDropDownMenu() {
   return (
     <React.Fragment>
-      <a href="#popup1" style={{ display: 'none' }} id="getIn">
+      <a href="#popup1" style={{ display: "none" }} id="getIn">
         Sign In
       </a>
-      <a href="" style={{ display: 'block' }}>
+      <a href="" style={{ display: "block" }}>
         Sign out
       </a>
-      <a href="" style={{ display: 'none' }}>
+      <a href="" style={{ display: "none" }}>
         Register
       </a>
     </React.Fragment>
@@ -123,10 +133,10 @@ function RegisteredDropDownMenu() {
 function UnRegisteredDropDownMenu() {
   return (
     <React.Fragment>
-      <a href="#popup1" style={{ display: 'block' }} id="getIn">
+      <a href="#popup1" style={{ display: "block" }} id="getIn">
         Sign In
       </a>
-      <a href="" style={{ display: 'none' }}>
+      <a href="" style={{ display: "none" }}>
         Sign out
       </a>
       <a href="">Register</a>
@@ -134,7 +144,9 @@ function UnRegisteredDropDownMenu() {
   );
 }
 
+function loggedUser() {}
+
 ReactDOM.render(
   <RegisterForm />,
-  document.getElementsByClassName('wrapper')[0]
+  document.getElementsByClassName("wrapper")[0]
 );
