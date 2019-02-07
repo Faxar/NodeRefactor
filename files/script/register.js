@@ -7,55 +7,63 @@ class RegisterForm extends React.Component {
       isLogin: false,
       user: '',
       password: '',
-      createStatus: ''
+      createStatus: '',
+      defaultUser: true
     };
   }
 
   onChange = e => this.setState({ [e.target.name]: e.target.value });
 
-  regMe = () => {
-    console.log('started');
-    socket.emit('regMe', {
-      userAccount: this.state.user,
-      userPass: this.state.password
-    });
+  onLogin = e => {
+    console.log('Login');
+    e.preventDefault();
+    socket.emit(
+      'login',
+      { username: this.state.user, userPassword: this.state.password },
+      function(servResponse) {
+        console.log('app side response' + servResponse);
+      }
+    );
+    this.populateStorage();
   };
 
-  onSubmit = e => {
-    e.preventDefault();
-    this.verifyUser(e.target.user.value);
-    this.populateStorage();
+  onRegister = () => {
+    console.log('Register');
+    let serverResponseText;
+    socket.emit(
+      'regMe',
+      {
+        userAccount: this.state.user,
+        userPass: this.state.password
+      },
+      serverResponse => {
+        if (serverResponse.userCreated) {
+          sessionStorage.setItem('userToken', serverResponse.tokenThatCreated);
+          this.setState({ createStatus: 'User was created' });
+        } else {
+          this.setState({ createStatus: 'Failed to create user' });
+        }
+      }
+    );
+
+    this.provideConfirmation();
   };
 
   populateStorage = () => {
     sessionStorage.setItem('user', this.state.user);
   };
 
-  verifyUser = e => {
-    console.log('verify user');
-    socket.emit(
-      'pleaseLogin',
-      { username: this.state.user, userPassword: this.state.password },
-      function(servResponse) {
-        console.log('app side response' + servResponse);
-      }
-    );
-    // console.log('verify user');
-    // e === 'Vassili'
-    //   ? this.setState({ createStatus: 'User created', isLogin: true })
-    //   : this.setState({ createStatus: "User can't be created" });
-    // this.provideConfirmation();
-  };
-
-  provideConfirmation = () =>
+  provideConfirmation = () => {
     setTimeout(() => {
       this.setState({ createStatus: '' });
     }, 5000);
+  };
 
   render() {
-    const { user, password, createStatus, isLogin } = this.state;
+    const { user, password, createStatus, isLogin, defaultUser } = this.state;
     let dropDownContent;
     let loggedInUser;
+    let userCred = defaultUser ? 'Guest' : this.state.user;
 
     if (user !== '' && isLogin) {
       loggedInUser = user;
@@ -93,20 +101,11 @@ class RegisterForm extends React.Component {
                 value={password}
                 onChange={this.onChange}
               />
-              <br />
-              <button value="Login" onClick={this.onSubmit}>
-                Log
-              </button>
-              {/* <input
-                type="submit"
-                value="LogIn"
-                id="regSub"
-                onClick={this.onSubmit}
-              /> */}
-              <button value="register" onClick={this.regMe}>
-                Register
-              </button>
             </form>
+            <div id="buttonContainer">
+              <button onClick={this.onLogin}>LogIn</button>
+              <button onClick={this.onRegister}>Register</button>
+            </div>
             <div className="userResponseStatus">{createStatus}</div>
           </div>
         </div>
@@ -162,6 +161,8 @@ function UnRegisteredDropDownMenu() {
     </React.Fragment>
   );
 }
+
+function loggedUser() {}
 
 ReactDOM.render(
   <RegisterForm />,

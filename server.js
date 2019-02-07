@@ -22,39 +22,45 @@ app.get('/', (req, res) => {
 io.on('connection', socket => {
   console.log('new user connected');
 
-  socket.on('regUs', (userCred, callback) => {
+  socket.on('regMe', (userCred, callback) => {
+    let tokenResp;
+
     var user = new User({
       userName: userCred.userAccount,
       password: userCred.userPass
     });
 
-    user.save().then(
-      () => {
-        callback('User Created');
+    user.generateAuthToken().then(
+      toke => {
+        tokenResp = toke;
+        callback({
+          userCreated: true,
+          userThatCreated: userCred.userAccount,
+          tokenThatCreated: tokenResp
+        });
       },
-      e => {
-        callback(e);
+      () => {
+        callback({
+          userCreated: false,
+          userThatCreated: userCred.userAccount
+        });
       }
     );
+
+    user.save().then(() => {}, e => {});
   });
 
   socket.on('pleaseLogin', (userCred, callback) => {
     User.findByCredentials(userCred.username, userCred.userPassword).then(
-      user => {
-        console.log(user);
+      () => {
+        console.log('User was confirmed');
       },
-      e => {
-        console.log('Server side rejected with e ' + e);
+      () => {
+        console.log('Response was reject');
       }
     );
     let repText = 'response positive';
     callback(repText);
-  });
-
-  socket.on('text', (text, callback) => {
-    let responseText = 'Some text from server and ' + text;
-    console.log('server side ', text);
-    callback(responseText);
   });
 });
 
