@@ -235,31 +235,26 @@
   text-align: center;
 }
 
-/* .registerContent {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-} */
-
 .card-body {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
-  grid-template-rows: repeat(4, 1fr);
+  grid-template-rows: minmax(100px, 200px), 100px, 100px;
   text-align: center;
 }
 
 .regForm {
   grid-column: 2;
-  margin: 20px;
   padding-top: 400px;
+  height: 200px;
 }
 
 .userResponseStatus {
   grid-column: 2;
+  margin-top: 20px;
 }
 
 #buttonContainer {
   grid-row: 2;
   grid-column: 2;
+  position: relative;
 }
