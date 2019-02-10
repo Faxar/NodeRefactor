@@ -1,13 +1,13 @@
-// var socket = io();
+var socket = io();
 
 class RegisterForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isLogin: false,
-      user: "",
-      password: "",
-      createStatus: "",
+      user: '',
+      password: '',
+      createStatus: '',
       defaultUser: true
     };
   }
@@ -15,54 +15,68 @@ class RegisterForm extends React.Component {
   onChange = e => this.setState({ [e.target.name]: e.target.value });
 
   onLogin = e => {
-    console.log("Login");
+    console.log('Login');
     e.preventDefault();
-    // socket.emit(
-    //   'login',
-    //   { username: this.state.user, userPassword: this.state.password },
-    //   function(servResponse) {
-    //     console.log('app side response' + servResponse);
-    //   }
-    // );
+    socket.emit(
+      'login',
+      { username: this.state.user, userPassword: this.state.password },
+      servResponse => {
+        if (servResponse === 'no user') {
+          this.setState({ createStatus: 'User not exist' });
+        } else if (servResponse === 'wrong password') {
+          this.setState({ createStatus: 'Wrong password' });
+        } else if (servResponse === 'login successfull') {
+          this.setState({
+            createStatus: 'Successfully logged in',
+            defaultUser: false,
+            isLogin: true
+          });
+        }
+      }
+    );
     this.populateStorage();
+    this.provideConfirmation();
   };
 
   onRegister = () => {
-    console.log("Register");
-    // socket.emit(
-    //   "regMe",
-    //   {
-    //     userAccount: this.state.user,
-    //     userPass: this.state.password
-    //   },
-    //   serverResponse => {
-    //     if (serverResponse.userCreated) {
-    //       sessionStorage.setItem("userToken", serverResponse.tokenThatCreated);
-    //       this.setState({ createStatus: "User was created" });
-    //     } else {
-    //       this.setState({ createStatus: "Failed to create user" });
-    //     }
-    //   }
-    // );
-    sessionStorage.setItem("user", this.state.user);
-    this.setState({ createStatus: "User have been registered" });
+    console.log('Register');
+    socket.emit(
+      'regMe',
+      {
+        userAccount: this.state.user,
+        userPass: this.state.password
+      },
+      serverResponse => {
+        if (serverResponse.userCreated) {
+          sessionStorage.setItem('userToken', serverResponse.tokenResponse);
+          this.setState({
+            createStatus: 'User was created',
+            defaultUser: false,
+            isLogin: true
+          });
+        } else {
+          this.setState({ createStatus: serverResponse.cause });
+        }
+      }
+    );
+    sessionStorage.setItem('user', this.state.user);
     this.provideConfirmation();
   };
 
   populateStorage = () => {
-    sessionStorage.setItem("user", this.state.user);
+    sessionStorage.setItem('user', this.state.user);
   };
 
   provideConfirmation = () => {
     setTimeout(() => {
-      this.setState({ createStatus: "" });
+      this.setState({ createStatus: '', password: '' });
     }, 5000);
   };
 
   render() {
     const { user, password, createStatus, isLogin, defaultUser } = this.state;
     let dropDownContent;
-    let userCred = defaultUser ? "Guest" : this.state.user;
+    let userCred = defaultUser ? 'Guest' : this.state.user;
 
     if (isLogin) {
       dropDownContent = <RegisteredDropDownMenu />;
@@ -128,10 +142,10 @@ class RegisterForm extends React.Component {
 function RegisteredDropDownMenu() {
   return (
     <React.Fragment>
-      <a href="#popup1" style={{ display: "none" }} id="getIn">
+      <a href="#popup1" style={{ display: 'none' }} id="getIn">
         Sign In
       </a>
-      <a href="" style={{ display: "block" }}>
+      <a href="" style={{ display: 'block' }}>
         Sign out
       </a>
     </React.Fragment>
@@ -141,10 +155,10 @@ function RegisteredDropDownMenu() {
 function UnRegisteredDropDownMenu() {
   return (
     <React.Fragment>
-      <a href="register.html" style={{ display: "none" }} id="getIn">
+      <a href="register.html" style={{ display: 'none' }} id="getIn">
         Sign In
       </a>
-      <a href="" style={{ display: "none" }}>
+      <a href="" style={{ display: 'none' }}>
         Sign out
       </a>
     </React.Fragment>
@@ -155,5 +169,5 @@ function loggedUser() {}
 
 ReactDOM.render(
   <RegisterForm />,
-  document.getElementsByClassName("wrapper")[0]
+  document.getElementsByClassName('wrapper')[0]
 );

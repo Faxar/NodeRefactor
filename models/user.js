@@ -87,24 +87,17 @@ UserSchema.statics.findByToken = function(token) {
 UserSchema.statics.findByCredentials = function(userName, password) {
   var User = this;
 
-  console.log(userName);
-
-  return User.find({ userName }).then(user => {
-    console.log(user);
+  return User.findOne({ userName }).then(user => {
     if (!user) {
-      console.log('didnt find a user');
-      return Promise.reject();
+      return Promise.reject('no user');
     }
 
     return new Promise((resolve, reject) => {
-      console.log('bcryps start');
-      bcrypt.compare(password, user[0].password, (err, res) => {
+      bcrypt.compare(password, user.password, (err, res) => {
         if (res) {
-          console.log('resolved');
           resolve(user);
         } else {
-          console.log('rejected');
-          reject();
+          reject('wrong password');
         }
       });
     });
@@ -122,7 +115,6 @@ UserSchema.pre('save', function(next) {
       });
     });
   } else if (user.isInit('password')) {
-    console.log('init triggered');
     bcrypt.getSalt(10, (err, salt) => {
       bcrypt.hash(user.password, salt, (err, hash) => {
         user.password = hash;
@@ -130,7 +122,7 @@ UserSchema.pre('save', function(next) {
       });
     });
   } else {
-    next;
+    next();
   }
 });
 

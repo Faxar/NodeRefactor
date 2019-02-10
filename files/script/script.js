@@ -2,14 +2,16 @@ class Scripts extends React.Component {
   constructor() {
     super();
     this.state = {
-      defaultUser: true,
-      user: sessionStorage.getItem("user")
+      user:
+        sessionStorage.getItem('user') === null
+          ? 'Guest'
+          : sessionStorage.getItem('user'),
+      defaultUser: sessionStorage.getItem('user') === null ? true : false
     };
   }
 
   render() {
     const { user, defaultUser } = this.state;
-    let userCredentials = defaultUser ? "Guest" : user;
     let dropDownContent;
 
     if (!defaultUser) {
@@ -47,7 +49,7 @@ class Scripts extends React.Component {
         <div className="head">
           <div className="userPro">
             <div className="rets">
-              <div id="userCred">{userCredentials}</div>
+              <div id="userCred">{user}</div>
             </div>
             <div className="dropdown-content">{dropDownContent}</div>
           </div>
@@ -61,10 +63,10 @@ class Scripts extends React.Component {
 function RegisteredDropDownMenu() {
   return (
     <React.Fragment>
-      <a href="#popup1" style={{ display: "none" }} id="getIn">
+      <a href="#popup1" style={{ display: 'none' }} id="getIn">
         Sign In
       </a>
-      <a href="" style={{ display: "block" }}>
+      <a href="" style={{ display: 'block' }}>
         Sign out
       </a>
     </React.Fragment>
@@ -74,20 +76,14 @@ function RegisteredDropDownMenu() {
 function UnRegisteredDropDownMenu() {
   return (
     <React.Fragment>
-      <a href="register.html" style={{ display: "block" }} id="getIn">
+      <a href="register.html" style={{ display: 'block' }} id="getIn">
         Sign In
       </a>
-      <a href="" style={{ display: "none" }}>
+      <a href="" style={{ display: 'none' }}>
         Sign out
       </a>
     </React.Fragment>
   );
 }
 
-// $("#getIn, .close").on("click", function() {
-//   console.log("clicked button");
-//   $(".wrapper").toggleclass("is-blurred");
-//   // blurToggle();
-// });
-
-ReactDOM.render(<Scripts />, document.getElementsByClassName("wrapper")[0]);
+ReactDOM.render(<Scripts />, document.getElementsByClassName('wrapper')[0]);

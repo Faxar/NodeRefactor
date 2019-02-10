@@ -23,44 +23,44 @@ io.on('connection', socket => {
   console.log('new user connected');
 
   socket.on('regMe', (userCred, callback) => {
-    let tokenResp;
-
     var user = new User({
       userName: userCred.userAccount,
       password: userCred.userPass
     });
 
-    user.generateAuthToken().then(
-      toke => {
-        tokenResp = toke;
-        callback({
-          userCreated: true,
-          userThatCreated: userCred.userAccount,
-          tokenThatCreated: tokenResp
-        });
+    user.save().then(
+      user => {
+        user.generateAuthToken().then(
+          token => {
+            callback({ userCreated: true, tokenResponse: token });
+          },
+          () => {}
+        );
       },
-      () => {
-        callback({
-          userCreated: false,
-          userThatCreated: userCred.userAccount
-        });
+      e => {
+        if (e.code === 11000) {
+          callback({
+            userCreated: false,
+            cause: `User name "${
+              user.userName
+            }" is already exist. Chose different user name`
+          });
+        } else {
+          callback({ userCreated: false, cause: 'Failed to create user' });
+        }
       }
     );
-
-    user.save().then(() => {}, e => {});
   });
 
-  socket.on('pleaseLogin', (userCred, callback) => {
+  socket.on('login', (userCred, callback) => {
     User.findByCredentials(userCred.username, userCred.userPassword).then(
       () => {
-        console.log('User was confirmed');
+        callback('login successfull');
       },
-      () => {
-        console.log('Response was reject');
+      e => {
+        callback(e);
       }
     );
-    let repText = 'response positive';
-    callback(repText);
   });
 });
 
