@@ -2,19 +2,33 @@ class Listr extends React.Component {
   constructor() {
     super();
     this.state = {
+      allIngredients: '',
+      userIngredients: '',
       defaultUser: true,
       user: sessionStorage.getItem("user")
     };
   }
+
+  onChange = e => this.setState({ [e.target.name]: e.target.value });
+
   render() {
     let { defaultUser, user } = this.state;
     let dropDownContent;
+    let items = ["itemswithSomething", "New Item something", "third item"];
 
     if (!defaultUser) {
       dropDownContent = <RegisteredDropDownMenu />;
     } else {
       dropDownContent = <UnRegisteredDropDownMenu />;
     }
+
+    let itemList = items.map(it => {
+      return (
+        <tr className="item">
+          <td>{it}</td>
+        </tr>
+      );
+    });
 
     return (
       <React.Fragment>
@@ -23,45 +37,33 @@ class Listr extends React.Component {
             <div className="list" id="allIng">
               <input
                 type="text"
+                name="allIngredients"
                 placeholder="Search for Ingredients..."
                 id="allIngSearch"
               />
               <table className="items" id="apiItems">
-                <tr className="header">
-                  <th>Ingredients</th>
-                </tr>
-                <tr className="item">
-                  <td>Item1</td>
-                </tr>
-                <tr className="item">
-                  <td>Item2</td>
-                </tr>
-                <tr className="item">
-                  <td>Item3</td>
-                </tr>
-                <tr className="item">
-                  <td>Item4</td>
-                </tr>
-                <tr className="item">
-                  <td>Item5</td>
-                </tr>
-                <tr className="item">
-                  <td>Item6</td>
-                </tr>
+                <tbody>
+                  <tr className="header">
+                    <th>Ingredients</th>
+                  </tr>
+                  {itemList}
+                </tbody>
               </table>
             </div>
             <div className="list" id="userIng">
               <input type="text" placeholder="Search for Ingredients..." />
               <table className="items" id="userItems">
-                <tr className="header">
-                  <th>Available Ingredients</th>
-                </tr>
-                <tr>
-                  <td>Item1</td>
-                </tr>
-                <tr>
-                  <td>Item2</td>
-                </tr>
+                <tbody>
+                  <tr className="header">
+                    <th>Available Ingredients</th>
+                  </tr>
+                  <tr className="item">
+                    <td>Item1</td>
+                  </tr>
+                  <tr className="item">
+                    <td>Item2</td>
+                  </tr>
+                </tbody>
               </table>
             </div>
           </div>
@@ -112,6 +114,16 @@ function UnRegisteredDropDownMenu() {
       <a href="" style={{ display: "none" }}>
         Sign out
       </a>
+    </React.Fragment>
+  );
+}
+
+function ReturnedItem(item) {
+  return (
+    <React.Fragment>
+      <tr className="item">
+        <td>{item}</td>
+      </tr>
     </React.Fragment>
   );
 }
