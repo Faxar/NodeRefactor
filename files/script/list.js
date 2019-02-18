@@ -2,41 +2,13 @@ class Listr extends React.Component {
   constructor() {
     super();
     this.state = {
-      allIngredients: [],
-      userIngredients: "",
       defaultUser: true,
-      user: sessionStorage.getItem("user")
+      user: sessionStorage.getItem('user')
     };
   }
-
-  componentWillMount() {
-    fetch("https://swapi.co/api/people/?format=json")
-      .then(response => response.json())
-      .then(({ results: items }) => this.setState({ allIngredients: items }));
-  }
-
-  // onChange = e => this.setState({ [e.target.name]: e.target.value });
-
-  filterList = e => {
-    this.state.allIngredients.map(ite => {
-      if (ite.name.indexOf(e.target.value) > -1) {
-        ite.visible = "";
-      } else {
-        ite.visible = "none";
-      }
-    });
-  };
-
   render() {
-    let { defaultUser, user, allIngredients } = this.state;
+    let { defaultUser, user } = this.state;
     let dropDownContent;
-    let fill = allIngredients.map(function(ite) {
-      return (
-        <tr className="item" key={}>
-          <td>{ite.name}</td>
-        </tr>
-      );
-    });
 
     if (!defaultUser) {
       dropDownContent = <RegisteredDropDownMenu />;
@@ -51,34 +23,45 @@ class Listr extends React.Component {
             <div className="list" id="allIng">
               <input
                 type="text"
-                name="allIngredients"
                 placeholder="Search for Ingredients..."
                 id="allIngSearch"
-                onChange={this.filterList}
               />
               <table className="items" id="apiItems">
-                <tbody>
-                  <tr className="header">
-                    <th>Ingredients</th>
-                  </tr>
-                  {fill}
-                </tbody>
+                <tr className="header">
+                  <th>Ingredients</th>
+                </tr>
+                <tr className="item">
+                  <td>Item1</td>
+                </tr>
+                <tr className="item">
+                  <td>Item2</td>
+                </tr>
+                <tr className="item">
+                  <td>Item3</td>
+                </tr>
+                <tr className="item">
+                  <td>Item4</td>
+                </tr>
+                <tr className="item">
+                  <td>Item5</td>
+                </tr>
+                <tr className="item">
+                  <td>Item6</td>
+                </tr>
               </table>
             </div>
             <div className="list" id="userIng">
               <input type="text" placeholder="Search for Ingredients..." />
               <table className="items" id="userItems">
-                <tbody>
-                  <tr className="header">
-                    <th>Available Ingredients</th>
-                  </tr>
-                  <tr className="item">
-                    <td>Item1</td>
-                  </tr>
-                  <tr className="item">
-                    <td>Item2</td>
-                  </tr>
-                </tbody>
+                <tr className="header">
+                  <th>Available Ingredients</th>
+                </tr>
+                <tr>
+                  <td>Item1</td>
+                </tr>
+                <tr>
+                  <td>Item2</td>
+                </tr>
               </table>
             </div>
           </div>
@@ -110,10 +93,10 @@ class Listr extends React.Component {
 function RegisteredDropDownMenu() {
   return (
     <React.Fragment>
-      <a href="#popup1" style={{ display: "none" }} id="getIn">
+      <a href="#popup1" style={{ display: 'none' }} id="getIn">
         Sign In
       </a>
-      <a href="" style={{ display: "block" }}>
+      <a href="" style={{ display: 'block' }}>
         Sign out
       </a>
     </React.Fragment>
@@ -123,27 +106,21 @@ function RegisteredDropDownMenu() {
 function UnRegisteredDropDownMenu() {
   return (
     <React.Fragment>
-      <a href="register.html" style={{ display: "block" }} id="getIn">
+      <a href="register.html" style={{ display: 'block' }} id="getIn">
         Sign In
       </a>
-      <a href="" style={{ display: "none" }}>
+      <a href="" style={{ display: 'none' }}>
         Sign out
       </a>
     </React.Fragment>
   );
 }
 
-function ReturnedItem(item) {
-  return (
-    <React.Fragment>
-      <tr className="item">
-        <td>{item}</td>
-      </tr>
-    </React.Fragment>
-  );
+function returnList() {
+  return <React.Fragment />;
 }
 
-ReactDOM.render(<Listr />, document.getElementsByClassName("wrapper")[0]);
+ReactDOM.render(<Listr />, document.getElementsByClassName('wrapper')[0]);
 
 // let filterInput = document.getElementById("allIngSearch");
 
@@ -165,4 +142,3 @@ ReactDOM.render(<Listr />, document.getElementsByClassName("wrapper")[0]);
 //     }
 //   }
 // }
-
