@@ -2,33 +2,47 @@ class Listr extends React.Component {
   constructor() {
     super();
     this.state = {
-      allIngredients: '',
-      userIngredients: '',
+      allIngredients: [],
+      userIngredients: "",
       defaultUser: true,
       user: sessionStorage.getItem("user")
     };
   }
 
-  onChange = e => this.setState({ [e.target.name]: e.target.value });
+  componentWillMount() {
+    fetch("https://swapi.co/api/people/?format=json")
+      .then(response => response.json())
+      .then(({ results: items }) => this.setState({ allIngredients: items }));
+  }
+
+  // onChange = e => this.setState({ [e.target.name]: e.target.value });
+
+  filterList = e => {
+    this.state.allIngredients.map(ite => {
+      if (ite.name.indexOf(e.target.value) > -1) {
+        ite.visible = "";
+      } else {
+        ite.visible = "none";
+      }
+    });
+  };
 
   render() {
-    let { defaultUser, user } = this.state;
+    let { defaultUser, user, allIngredients } = this.state;
     let dropDownContent;
-    let items = ["itemswithSomething", "New Item something", "third item"];
+    let fill = allIngredients.map(function(ite) {
+      return (
+        <tr className="item" key={}>
+          <td>{ite.name}</td>
+        </tr>
+      );
+    });
 
     if (!defaultUser) {
       dropDownContent = <RegisteredDropDownMenu />;
     } else {
       dropDownContent = <UnRegisteredDropDownMenu />;
     }
-
-    let itemList = items.map(it => {
-      return (
-        <tr className="item">
-          <td>{it}</td>
-        </tr>
-      );
-    });
 
     return (
       <React.Fragment>
@@ -40,13 +54,14 @@ class Listr extends React.Component {
                 name="allIngredients"
                 placeholder="Search for Ingredients..."
                 id="allIngSearch"
+                onChange={this.filterList}
               />
               <table className="items" id="apiItems">
                 <tbody>
                   <tr className="header">
                     <th>Ingredients</th>
                   </tr>
-                  {itemList}
+                  {fill}
                 </tbody>
               </table>
             </div>
@@ -150,3 +165,4 @@ ReactDOM.render(<Listr />, document.getElementsByClassName("wrapper")[0]);
 //     }
 //   }
 // }
+
