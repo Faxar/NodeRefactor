@@ -3,7 +3,7 @@ class Listr extends React.Component {
     super();
     this.state = {
       allIngredients: [],
-      userIngredients: "",
+      userIngredients: [],
       defaultUser: true,
       user: sessionStorage.getItem("user")
     };
@@ -17,8 +17,33 @@ class Listr extends React.Component {
         this.setState({ allIngredients: responseArr });
       });
   }
+
   filter(e) {
     this.setState({ filter: e.target.value });
+  }
+
+  fetchDetails = e => {
+    let clickedItemName = e.target.childNodes[0].textContent;
+    console.log(clickedItemName);
+    let newIng = this.state.allIngredients.filter(ing => {
+      ing.strIngredient1 !== clickedItemName;
+    });
+    console.log(newIng);
+  };
+
+  renderTableRows(data) {
+    return data.map((ingr, index) => {
+      return (
+        <tr
+          className="item"
+          key={index}
+          data-item={ingr}
+          onClick={this.fetchDetails}
+        >
+          <td>{ingr.strIngredient1}</td>
+        </tr>
+      );
+    });
   }
 
   // onChange = e => this.setState({ [e.target.name]: e.target.value });
@@ -66,13 +91,7 @@ class Listr extends React.Component {
                   <tr className="header">
                     <th>Ingredients</th>
                   </tr>
-                  {allIngredients.map(function(ite) {
-                    return (
-                      <tr className="item">
-                        <td>{ite.strIngredient1}</td>
-                      </tr>
-                    );
-                  })}
+                  {this.renderTableRows(allIngredients)}
                 </tbody>
               </table>
             </div>
@@ -82,12 +101,6 @@ class Listr extends React.Component {
                 <tbody>
                   <tr className="header">
                     <th>Available Ingredients</th>
-                  </tr>
-                  <tr className="item">
-                    <td>Item1</td>
-                  </tr>
-                  <tr className="item">
-                    <td>Item2</td>
                   </tr>
                 </tbody>
               </table>
