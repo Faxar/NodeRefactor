@@ -5,13 +5,13 @@ class Listr extends React.Component {
       allIngredients: [],
       userIngredients: [],
       defaultUser: true,
-      user: sessionStorage.getItem("user")
+      user: sessionStorage.getItem('user')
     };
   }
 
   componentWillMount() {
     axios
-      .get("https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list")
+      .get('https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list')
       .then(response => {
         let responseArr = response.data.drinks;
         this.setState({ allIngredients: responseArr });
@@ -24,14 +24,19 @@ class Listr extends React.Component {
 
   fetchDetails = e => {
     let clickedItemName = e.target.childNodes[0].textContent;
-    console.log(clickedItemName);
-    let newIng = this.state.allIngredients.filter(ing => {
-      ing.strIngredient1 !== clickedItemName;
+    let { userIngredients, allIngredients } = this.state;
+    let usering = userIngredients;
+    let newIng = allIngredients.filter(ing => {
+      if (ing.strIngredient1 !== clickedItemName) {
+        return ing;
+      } else {
+        usering.push(ing);
+      }
     });
-    console.log(newIng);
+    this.setState({ allIngredients: newIng, userIngredients: usering });
   };
 
-  renderTableRows(data) {
+  renderAPIRows(data) {
     return data.map((ingr, index) => {
       return (
         <tr
@@ -46,10 +51,20 @@ class Listr extends React.Component {
     });
   }
 
+  renderUserRows(items) {
+    return items.map(it => {
+      return (
+        <tr className="item">
+          <td>{it.strIngredient1}</td>
+        </tr>
+      );
+    });
+  }
+
   // onChange = e => this.setState({ [e.target.name]: e.target.value });
 
   render() {
-    let { defaultUser, user, allIngredients } = this.state;
+    let { defaultUser, user, allIngredients, userIngredients } = this.state;
     let dropDownContent;
 
     if (this.state.filter) {
@@ -74,9 +89,9 @@ class Listr extends React.Component {
               className="list"
               id="allIng"
               style={{
-                overflow: "scroll",
-                overflowX: "hidden",
-                overflowY: "auto"
+                overflow: 'scroll',
+                overflowX: 'hidden',
+                overflowY: 'auto'
               }}
             >
               <input
@@ -91,7 +106,7 @@ class Listr extends React.Component {
                   <tr className="header">
                     <th>Ingredients</th>
                   </tr>
-                  {this.renderTableRows(allIngredients)}
+                  {this.renderAPIRows(allIngredients)}
                 </tbody>
               </table>
             </div>
@@ -102,6 +117,7 @@ class Listr extends React.Component {
                   <tr className="header">
                     <th>Available Ingredients</th>
                   </tr>
+                  {this.renderUserRows(userIngredients)}
                 </tbody>
               </table>
             </div>
@@ -111,7 +127,7 @@ class Listr extends React.Component {
           <div className="controlPane">
             <a href="index.html" className="fas fa-home" />
             <a href="list.html" className="fas fa-list" />
-            <a href="" className="fas fa-cocktail" />
+            <a href="api.html" className="fas fa-cocktail" />
             <a href="" className="fas fa-book" />
             <a href="" className="fas fa-wrench" />
           </div>
@@ -134,10 +150,10 @@ class Listr extends React.Component {
 function RegisteredDropDownMenu() {
   return (
     <React.Fragment>
-      <a href="#popup1" style={{ display: "none" }} id="getIn">
+      <a href="#popup1" style={{ display: 'none' }} id="getIn">
         Sign In
       </a>
-      <a href="" style={{ display: "block" }}>
+      <a href="" style={{ display: 'block' }}>
         Sign out
       </a>
     </React.Fragment>
@@ -147,10 +163,10 @@ function RegisteredDropDownMenu() {
 function UnRegisteredDropDownMenu() {
   return (
     <React.Fragment>
-      <a href="register.html" style={{ display: "block" }} id="getIn">
+      <a href="register.html" style={{ display: 'block' }} id="getIn">
         Sign In
       </a>
-      <a href="" style={{ display: "none" }}>
+      <a href="" style={{ display: 'none' }}>
         Sign out
       </a>
     </React.Fragment>
@@ -167,7 +183,7 @@ function ReturnedItem(item) {
   );
 }
 
-ReactDOM.render(<Listr />, document.getElementsByClassName("wrapper")[0]);
+ReactDOM.render(<Listr />, document.getElementsByClassName('wrapper')[0]);
 
 // let filterInput = document.getElementById("allIngSearch");
 

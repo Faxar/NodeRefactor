@@ -120,7 +120,7 @@ class RegisterForm extends React.Component {
           <div className="controlPane">
             <a href="index.html" className="fas fa-home" />
             <a href="list.html" className="fas fa-list" />
-            <a href="" className="fas fa-cocktail" />
+            <a href="api.html" className="fas fa-cocktail" />
             <a href="" className="fas fa-book" />
             <a href="" className="fas fa-wrench" />
           </div>

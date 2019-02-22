@@ -1,21 +1,26 @@
 var socket = io();
 
-$('getItems').click();
-
-class getItems extends React.Component {
+class GetItems extends React.Component {
   constructor() {
-    super(),
-      (state = {
-        ingredients: []
-      });
+    super();
+    this.state = {};
   }
 
-  getIngredients = () => {};
+  populateDBItems = () => {
+    console.log('clicked');
+    socket.emit('populate', serverResp => {
+      console.log(serverResp);
+    });
+  };
 
   render() {
     return (
       <React.Fragment>
-        <div className="main" />
+        <div className="main">
+          <div>
+            <button onClick={this.populateDBItems}>Get Items</button>
+          </div>
+        </div>
         <div className="sidebar">
           <div className="controlPane">
             <a href="index.html" className="fas fa-home" />
@@ -29,8 +34,8 @@ class getItems extends React.Component {
         <div className="head">
           <div className="userPro">
             <div className="userPane" />
-            <div id="userCred">{userCred}</div>
-            <div className="dropdown-content">{dropDownContent}</div>
+            <div id="userCred" />
+            <div className="dropdown-content" />
           </div>
           <div className="mid" />
         </div>
@@ -39,7 +44,4 @@ class getItems extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <RegisterForm />,
-  document.getElementsByClassName('wrapper')[0]
-);
+ReactDOM.render(<GetItems />, document.getElementsByClassName('wrapper')[0]);

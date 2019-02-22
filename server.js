@@ -4,6 +4,7 @@ const http = require('http');
 const express = require('express');
 const path = require('path');
 const socketIO = require('socket.io');
+const axios = require('axios');
 
 const port = process.env.PORT;
 const publicPath = path.join(__dirname, './files');
@@ -61,6 +62,19 @@ io.on('connection', socket => {
         callback(e);
       }
     );
+  });
+
+  socket.on('populate', callback => {
+    axios
+      .get('https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list')
+      .then(
+        resp => {
+          callback(resp);
+        },
+        rej => {
+          callback(rej);
+        }
+      );
   });
 });
 
