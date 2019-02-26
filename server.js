@@ -64,17 +64,18 @@ io.on('connection', socket => {
     );
   });
 
-  socket.on('populate', callback => {
-    axios
-      .get('https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list')
-      .then(
-        resp => {
-          callback(resp);
-        },
-        rej => {
-          callback(rej);
-        }
-      );
+  socket.on('populate', (user, callback) => {
+    const resp = async () => {
+      try {
+        return axios.get(
+          'https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list'
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    let rs = resp().then(response => );
   });
 });
 
