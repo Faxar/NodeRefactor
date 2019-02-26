@@ -1,3 +1,5 @@
+var socket = io();
+
 class Listr extends React.Component {
   constructor() {
     super();
@@ -5,17 +7,29 @@ class Listr extends React.Component {
       allIngredients: [],
       userIngredients: [],
       defaultUser: true,
-      user: sessionStorage.getItem('user')
+      user: ''
     };
   }
 
-  componentWillMount() {
-    axios
-      .get('https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list')
-      .then(response => {
-        let responseArr = response.data.drinks;
-        this.setState({ allIngredients: responseArr });
+  componentDidMount() {
+    console.log('starting');
+    let { allIngredients, user } = this.state;
+    if (sessionStorage.getItem('user') !== null) {
+      this.setState({
+        user: sessionStorage.getItem('user'),
+        defaultUser: false
       });
+    } else {
+      this.setState({ user: 'Guest' });
+    }
+    console.log(allIngredients.length < 1);
+    console.log(this.state.defaultUser);
+    if (allIngredients.length < 1) {
+      console.log('logged in and emitting');
+      socket.emit('populate', user, response => {
+        console.log(response);
+      });
+    }
   }
 
   filter(e) {
