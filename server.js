@@ -13,6 +13,7 @@ var server = http.createServer(app);
 var io = socketIO(server);
 var { mongoose } = require('./db/mongoose');
 var { User } = require('./models/user');
+var { Ingredient } = require('./models/ingredient');
 
 app.use(express.static(publicPath));
 
@@ -65,17 +66,16 @@ io.on('connection', socket => {
   });
 
   socket.on('populate', (user, callback) => {
-    const resp = async () => {
-      try {
-        return axios.get(
-          'https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list'
-        );
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    let rs = resp().then(response => );
+    axios
+      .get('https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list')
+      .then(res => {
+        res.data.drinks.forEach(item => {
+          var ing = new Ingredient({
+            name: item.strIngredient1
+          });
+          ing.save();
+        });
+      });
   });
 });
 
