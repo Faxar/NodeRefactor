@@ -35,6 +35,10 @@ class Listr extends React.Component {
   filter(e) {
     this.setState({ filter: e.target.value });
   }
+  
+  userFilter(e) {
+    this.setState({ userFilter: e.target.value });
+  }
 
   fetchDetails = e => {
     let clickedItemName = e.target.childNodes[0].textContent;
@@ -48,6 +52,20 @@ class Listr extends React.Component {
       }
     });
     this.setState({ allIngredients: newIng, userIngredients: usering });
+  };
+
+  fetchUserData = e => {
+    let clickedItemName = e.target.childNodes[0].textContent;
+    let allIng = this.state.allIngredients;
+    let newUserIng = this.state.userIngredients.filter(ing => {
+      if (ing.strIngredient1 !== clickedItemName) {
+        return ing;
+      } else {
+        allIng.push(ing);
+      }
+    });
+
+    this.setState({ allIngredients: allIng, userIngredients: newUserIng });
   };
 
   renderAPIRows(data) {
@@ -65,10 +83,10 @@ class Listr extends React.Component {
     });
   }
 
-  renderUserRows(items) {
-    return items.map(it => {
+  renderUserRow(arr) {
+    return arr.map((it, index) => {
       return (
-        <tr className="item">
+        <tr className="item" key={1 + index} onClick={this.fetchUserData}>
           <td>{it.strIngredient1}</td>
         </tr>
       );
@@ -80,12 +98,21 @@ class Listr extends React.Component {
   render() {
     let { defaultUser, user, allIngredients, userIngredients } = this.state;
     let dropDownContent;
+    let userCred = defaultUser ? "Guest" : this.state.user;
 
     if (this.state.filter) {
       allIngredients = allIngredients.filter(item =>
         item.strIngredient1
           .toLowerCase()
           .includes(this.state.filter.toLowerCase())
+      );
+    }
+    
+    if (this.state.userFilter) {
+      userIngredients = userIngredients.filter(item =>
+        item.strIngredient1
+          .toLowerCase()
+          .includes(this.state.userFilter.toLowerCase())
       );
     }
 
@@ -149,7 +176,7 @@ class Listr extends React.Component {
         <div className="head">
           <div className="userPro">
             <div className="rets">
-              <div id="userCred">{user}</div>
+              <div id="userCred">{userCred}</div>
             </div>
             <div className="dropdown-content">{dropDownContent}</div>
           </div>
@@ -198,24 +225,3 @@ function ReturnedItem(item) {
 }
 
 ReactDOM.render(<Listr />, document.getElementsByClassName('wrapper')[0]);
-
-// let filterInput = document.getElementById("allIngSearch");
-
-// filterInput.addEventListener("keyup", filterName);
-
-// function filterName() {
-//   console.log($("#allIngSearch").val());
-
-//   let filterSearch = $("#allIngSearch").val();
-
-//   let tr = $(".items").find(".item");
-
-//   for (let i = 0; i < tr.length; i++) {
-//     let td = tr[i].getElementsByTagName("td")[0];
-//     if (td.innerHTML.toUpperCase().indexOf(filterSearch) > -1) {
-//       tr[i].style.display = "";
-//     } else {
-//       tr[i].style.display = "none";
-//     }
-//   }
-// }
