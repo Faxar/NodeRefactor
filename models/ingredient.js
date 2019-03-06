@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 var IngredientSchema = new mongoose.Schema({
+  id: {
+    type: Number,
+    require: true,
+    unique: true
+  }
   name: {
     type: String,
     require: true,
